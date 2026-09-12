@@ -267,7 +267,7 @@ export const sePuedePresentar = (rs: RequisitoNomina[]) => !rs.some(r => r.estad
 // Mismo mecanismo que `documentosLegales`: la línea que depende de un dato que
 // no está se OMITE, no se inventa. Un papel con un CUIT que no es el de la
 // entidad dice algo falso, y esto se presenta ante el Estado.
-const AUSENTE = ''
+const AUSENTE = ' '
 const FALTA = (que: string) => AUSENTE + que
 const sinHuecos = (l: string[]) => l.filter(x => !x.includes(AUSENTE)).join('\n').replace(/^\n+/, '')
 

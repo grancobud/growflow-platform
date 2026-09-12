@@ -42,6 +42,27 @@ El sistema incluye el set documental de validación: plan de validación, URS co
 
 > **El sistema no está validado formalmente.** Está construido para poder validarse. La diferencia es que validar exige ejecutar los protocolos, cerrar desvíos y que Calidad apruebe el informe. Eso no ocurrió.
 
+### Las pruebas
+
+`app/src/lib/__tests__/` tiene **623 tests** sobre la lógica de dominio: arqueos de
+caja, deuda por socio, códigos de lote, la cadena de justificación del material, la
+nómina para el ministerio, el buscador del padrón.
+
+Casi ninguno nació de querer cobertura. Nacieron de un error que ya había pasado, y
+el comentario de arriba dice cuál fue. Por ejemplo, en `codigoDeLote.test.ts` los 14
+códigos que se usan como fixture son códigos heredados reales de una planilla previa
+—`#1COOP2526`, `A-F14726`, `C-CK050426`— que no siguen ningún formato y que no se
+van a renumerar nunca: la prueba existe porque el generador tiene que convivir con
+ellos, no porque quede lindo.
+
+```bash
+npm test          # 623 tests
+npm run test:e2e  # Playwright
+```
+
+Los nombres de personas, los datos de contacto y los importes que aparecen en los
+tests son inventados. Ver "Sobre los datos" más abajo.
+
 ### Registro append-only
 
 Las operaciones no se editan ni se borran: se corrigen con un asiento nuevo que referencia al anterior. Un registro que se puede reescribir no sirve ante una inspección.
