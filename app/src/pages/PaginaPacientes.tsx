@@ -18,6 +18,7 @@ import {
 import { cultivoService, type ResumenPlanta } from '../lib/cultivo'
 import { MODO_DEMO } from '../lib/supabase'
 import { leerCredencial, OCR_DISPONIBLE } from '../lib/ocr'
+import { normalizarCredencial, avisosDeCoherencia } from '../lib/credencialOcr'
 import { FotoPrivada } from '../components/FotoPrivada'
 import { btnPrimario, btnSutil, nombreTocable, etiquetaCampo, inputFormulario, sinAutocorreccion } from '../lib/ui'
 import { GuiaDelFormulario, AyudaCampo, OjoDelFormulario } from '../components/ong/GuiaDelFormulario'
@@ -696,34 +697,50 @@ function ModalPaciente({ paciente, prefill = null, padron = [], onCerrar, onGuar
     if (file.type !== 'application/pdf') { toast.error('Subí el PDF de la credencial REPROCANN'); return }
     setLeyendo(true)
     try {
-      const [d] = await Promise.all([
+      const [bruto] = await Promise.all([
         leerCredencial(file),
         registroService.subirCredencial(file).then(setCredencialUrl).catch(() => {}),
       ])
-      const ESTADOS = ESTADOS_REPROCANN as readonly string[]
-      const MODS = MODALIDADES as readonly string[]
+      // LO QUE DEVUELVE EL MODELO PASA POR `normalizarCredencial` ANTES DE
+      // TOCAR EL FORMULARIO.
+      //
+      // Antes entraba con un cast y tres regex escritas acá mismo. El DNI, el
+      // teléfono y el número de REPROCANN no se verificaban: entraba lo que
+      // viniera. Ahora lo que no puede ser cierto se rechaza con el motivo, y
+      // el motivo se muestra — un campo que el modelo leyó mal y se descarta en
+      // silencio es un campo que la persona no sabe que tiene que cargar.
+      const { campos: d, rechazos } = normalizarCredencial(bruto)
       setForm(f => ({
         ...f,
-        nombre_completo: d.nombre_completo || f.nombre_completo,
-        dni: d.dni || f.dni,
-        fecha_nacimiento: /^\d{4}-\d{2}-\d{2}$/.test(d.fecha_nacimiento || '') ? d.fecha_nacimiento! : f.fecha_nacimiento,
-        telefono: d.telefono || f.telefono,
-        email: d.email || f.email,
-        localidad: d.localidad || f.localidad,
-        provincia: d.provincia || f.provincia,
-        domicilio: d.domicilio || f.domicilio,
-        reprocann_nro: d.reprocann_nro || f.reprocann_nro,
-        reprocann_estado: (ESTADOS.includes(d.reprocann_estado || '') ? d.reprocann_estado : f.reprocann_estado) as EstadoReprocann,
-        reprocann_emision: /^\d{4}-\d{2}-\d{2}$/.test(d.reprocann_emision || '') ? d.reprocann_emision! : f.reprocann_emision,
-        reprocann_vencimiento: /^\d{4}-\d{2}-\d{2}$/.test(d.reprocann_vencimiento || '') ? d.reprocann_vencimiento! : f.reprocann_vencimiento,
-        modalidad: MODS.includes(d.modalidad || '') ? d.modalidad! : f.modalidad,
-        plantas_habilitadas: d.plantas_habilitadas != null && d.plantas_habilitadas !== '' ? String(d.plantas_habilitadas) : f.plantas_habilitadas,
-        m2_habilitados: d.m2_habilitados != null && d.m2_habilitados !== '' ? String(d.m2_habilitados) : f.m2_habilitados,
-        patologia: d.patologia || f.patologia,
-        medico_tratante: d.medico_tratante || f.medico_tratante,
-        matricula_medico: d.matricula_medico || f.matricula_medico,
+        nombre_completo: d.nombre_completo ?? f.nombre_completo,
+        dni: d.dni ?? f.dni,
+        fecha_nacimiento: d.fecha_nacimiento ?? f.fecha_nacimiento,
+        telefono: d.telefono ?? f.telefono,
+        email: d.email ?? f.email,
+        localidad: d.localidad ?? f.localidad,
+        provincia: d.provincia ?? f.provincia,
+        domicilio: d.domicilio ?? f.domicilio,
+        reprocann_nro: d.reprocann_nro ?? f.reprocann_nro,
+        reprocann_estado: (d.reprocann_estado ?? f.reprocann_estado) as EstadoReprocann,
+        reprocann_emision: d.reprocann_emision ?? f.reprocann_emision,
+        reprocann_vencimiento: d.reprocann_vencimiento ?? f.reprocann_vencimiento,
+        modalidad: d.modalidad ?? f.modalidad,
+        plantas_habilitadas: d.plantas_habilitadas != null ? String(d.plantas_habilitadas) : f.plantas_habilitadas,
+        m2_habilitados: d.m2_habilitados != null ? String(d.m2_habilitados) : f.m2_habilitados,
+        patologia: d.patologia ?? f.patologia,
+        medico_tratante: d.medico_tratante ?? f.medico_tratante,
+        matricula_medico: d.matricula_medico ?? f.matricula_medico,
       }))
-      toast.success('Datos leídos de la credencial. Revisalos y guardá.')
+
+      const leidos = Object.keys(d).length
+      if (rechazos.length) {
+        // Se nombran los campos, no se dice «hubo errores»: la persona tiene
+        // que saber cuáles cargar a mano.
+        toast.error(`No se pudo leer: ${rechazos.map(r => r.campo).join(', ')}. Cargalos a mano.`, { duration: 8000 })
+      }
+      for (const aviso of avisosDeCoherencia(d)) toast.error(aviso, { duration: 8000 })
+      if (leidos) toast.success(`${leidos} campos leídos de la credencial. Revisalos y guardá.`)
+      else toast.error('No se pudo leer ningún campo de la credencial.')
     } catch (err) {
       toast.error(`No se pudo leer la credencial: ${(err as Error).message}`)
     } finally {

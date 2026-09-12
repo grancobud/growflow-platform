@@ -66,6 +66,32 @@ GitHub Actions los corre en cada push y en cada pull request, junto con el
 typecheck y el lint. La configuración está en `.github/workflows/ci.yml`, y el
 estándar lo sostiene el sistema en vez de la memoria de quien sube el código.
 
+### El eval del OCR
+
+Una pantalla lee la credencial REPROCANN de un paciente con un modelo de visión
+local y completa el formulario. Un modelo leyendo un PDF escaneado confunde un
+8 con un 3, y el problema no es que falle de forma evidente: es el dato
+**plausible y equivocado**, un DNI de ocho dígitos que no es el de la persona.
+
+`credencialOcr.ts` verifica esa salida antes de que toque el formulario, y
+`credencialOcr.eval.test.ts` mide qué tan bien lo hace, con dos números que no
+son el mismo:
+
+| | |
+|---|---|
+| **Contaminación** | Cuántos campos malos se aceptan como buenos. **Tiene que ser cero.** |
+| **Cobertura** | De los campos válidos, cuántos se extraen. Puede bajar: se cargan a mano. |
+
+Se confunden todo el tiempo. Un sistema que rechaza todo tiene contaminación
+cero y no sirve; uno que acepta todo tiene cobertura perfecta y es peor que no
+tener OCR.
+
+Las entradas del eval son los modos de falla reales del modelo —puntos del DNI
+copiados tal cual, un 31 de febrero, el encabezado del formulario en lugar del
+nombre, una credencial que vence antes de emitirse—. Los datos personales son
+inventados; las fallas no. Cambiar de modelo y saber en segundos si mejoró o
+empeoró es para lo que existe.
+
 Los nombres de personas, los datos de contacto y los importes que aparecen en los
 tests son inventados. Ver "Sobre los datos" más abajo.
 
