@@ -48,6 +48,16 @@ Las operaciones no se editan ni se borran: se corrigen con un asiento nuevo que 
 
 ---
 
+## Cómo está construido
+
+Este sistema está construido con **Claude Code** sobre el repositorio real. El trabajo
+es definir el problema, decidir la arquitectura y verificar el resultado contra los
+datos y la operación reales antes de que llegue a producción.
+
+Por eso las migraciones están comentadas como están: cuando el criterio de aceptación
+es un número medido —"anon veía 45 filas, ahora ve 0"— la decisión queda verificable
+por cualquiera que lea el repositorio, y no depende de acordarse de por qué se hizo.
+
 ## Stack
 
 | Capa | Tecnología |
