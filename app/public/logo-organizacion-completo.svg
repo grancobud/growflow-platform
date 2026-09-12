@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" role="img" aria-label="GrowFlow">
+  <rect width="120" height="120" rx="24" fill="#1f7a4d"/>
+  <path d="M60 26c-9 14-22 22-22 38a22 22 0 0 0 44 0c0-16-13-24-22-38z" fill="#fff" opacity=".92"/>
+  <circle cx="60" cy="66" r="7" fill="#1f7a4d"/>
+  <text x="148" y="58" font-family="Helvetica,Arial,sans-serif" font-size="34" font-weight="700" fill="#1a1a1a">GrowFlow</text>
+  <text x="149" y="84" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#666">Trazabilidad y cumplimiento</text>
+</svg>

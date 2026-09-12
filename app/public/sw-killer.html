@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Limpiando cache CannTrace</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0f172a;color:white;padding:2rem;text-align:center;min-height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.box{max-width:480px;background:#1e293b;border:1px solid #334155;border-radius:1rem;padding:2rem}
+h1{margin:0 0 1rem;color:#10b981}
+.log{background:#0f172a;border:1px solid #334155;border-radius:.5rem;padding:.75rem;text-align:left;font-family:monospace;font-size:.75rem;margin-top:1rem;max-height:200px;overflow:auto}
+.btn{background:#10b981;color:white;border:none;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:600;cursor:pointer;margin-top:1rem}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🧹 Limpiando CannTrace</h1>
+<p id="msg">Desregistrando service workers viejos...</p>
+<div class="log" id="log"></div>
+<button class="btn" id="goBtn" style="display:none" onclick="location.replace('/')">Ir a la app →</button>
+</div>
+<script>
+const log = document.getElementById('log')
+const msg = document.getElementById('msg')
+const btn = document.getElementById('goBtn')
+const add = (t) => { log.innerHTML += t + '<br>'; log.scrollTop = log.scrollHeight }
+
+;(async () => {
+  add('1. Buscando service workers...')
+  if ('serviceWorker' in navigator) {
+    const regs = await navigator.serviceWorker.getRegistrations()
+    add(`   Encontrados: ${regs.length}`)
+    for (const r of regs) {
+      const ok = await r.unregister()
+      add(`   ${ok ? '✓ desinstalado' : '✗ falló'}: ${r.scope}`)
+    }
+  } else {
+    add('   No hay SW soportado')
+  }
+
+  add('2. Limpiando caches del browser...')
+  if ('caches' in window) {
+    const keys = await caches.keys()
+    add(`   Caches encontrados: ${keys.length}`)
+    for (const k of keys) {
+      await caches.delete(k)
+      add(`   ✓ borrado: ${k}`)
+    }
+  }
+
+  add('3. Borrando IndexedDB...')
+  if ('indexedDB' in window && indexedDB.databases) {
+    try {
+      const dbs = await indexedDB.databases()
+      for (const db of dbs) {
+        if (db.name) { indexedDB.deleteDatabase(db.name); add(`   ✓ ${db.name}`) }
+      }
+    } catch(e) { add('   (no se pudo listar)') }
+  }
+
+  add('4. Borrando localStorage / sessionStorage...')
+  try { localStorage.clear(); sessionStorage.clear(); add('   ✓ ok') } catch(e) {}
+
+  add('')
+  add('✅ Listo. Recarga forzada en 2 segundos...')
+  msg.innerHTML = '✅ Cache limpia. Redirigiendo...'
+  btn.style.display = 'inline-block'
+
+  setTimeout(() => {
+    // Recarga forzada con cache-bust
+    window.location.replace('/?v=' + Date.now())
+  }, 2000)
+})().catch(e => add('Error: ' + e.message))
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+-- Rol `administrador_sistema`: administra todo menos la plata.
+--
+-- Ya aplicado a mano sobre qivhrbsnvuaylqofpjti el 30/08/2026, en dos partes
+-- (`rol_administrador_sistema_sin_caja` y `el_check_de_rol_tambien_lista_los_roles`).
+-- Queda aca como registro. NO aplicado a Chaco.
+--
+-- LA LISTA DE ROLES VIVE EN CINCO LUGARES. Agregar uno y tocar cuatro deja un
+-- rol que se puede ELEGIR y no se puede GUARDAR:
+--
+--   1. `RolUsuario`        app/src/types/index.ts
+--   2. `PERMISOS_ROL` y `RUTA_DEFAULT_ROL`   app/src/hooks/useAuth.ts
+--   3. `ROLES_ASIGNABLES`  app/src/lib/usuarios.ts     (para poder elegirlo)
+--   4. `ROLES`             supabase/functions/usuarios-invitar/index.ts
+--   5. el CHECK de `perfiles_usuario.rol` + las policies que lo nombren
+--
+-- El 30/08 se hicieron los cuatro primeros y falto el quinto: la invitacion
+-- llegaba hasta el final, moria con «violates check constraint
+-- perfiles_usuario_rol_check», y el rollback borraba al usuario recien creado.
+-- El mail de invitacion YA habia salido, asi que quedaba un enlace muerto en la
+-- casilla de alguien.
+--
+-- QUE VE Y QUE NO
+--
+-- `es_admin()` pasa a incluirlo —gobierna `perfiles_usuario` y el borrado de
+-- pacientes—, y se lo suma a las 42 policies que llevan la lista a mano.
+--
+-- A NINGUNA de las 18 tablas de plata. `puede_ver_plata()` NO se toca (sigue
+-- siendo administrador / administrativo / auditor), y las dos que no pasan por
+-- ella —`ong_pagos_proveedor` y `ong_tarifas`— se excluyen explicitamente.
+--
+-- La exclusion es una LISTA y no una regla automatica a proposito: una tabla de
+-- plata nueva no se le abre sola al rol. Hay que decidirlo.

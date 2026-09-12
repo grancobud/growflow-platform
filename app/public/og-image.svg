@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D6B4E"/>
+      <stop offset="55%" stop-color="#074032"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <radialGradient id="glowAccent" cx="85%" cy="15%" r="40%">
+      <stop offset="0%" stop-color="#C49A2C" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#C49A2C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowPrimary" cx="10%" cy="90%" r="45%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glowAccent)"/>
+  <rect width="1200" height="630" fill="url(#glowPrimary)"/>
+
+  <!-- Logo -->
+  <g transform="translate(80, 80)">
+    <rect width="68" height="68" rx="16" fill="#0D6B4E"/>
+    <g transform="translate(22, 22)" fill="#ffffff">
+      <!-- Leaf icon simplified -->
+      <path d="M0 11a11 11 0 0 1 11-11c0 6-5 11-11 11z" />
+      <path d="M22 11a11 11 0 0 1-11 11c0-6 5-11 11-11z" />
+      <path d="M11 0v22" stroke="#ffffff" stroke-width="1.5" fill="none"/>
+    </g>
+    <text x="86" y="33" font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700" font-size="22" fill="#ffffff">CannTrace</text>
+    <text x="86" y="54" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#86efac">Trazabilidad GAMP5</text>
+  </g>
+
+  <!-- Accent badge -->
+  <g transform="translate(80, 200)">
+    <rect width="540" height="36" rx="18" fill="#C49A2C" fill-opacity="0.18" stroke="#C49A2C" stroke-opacity="0.45" stroke-width="1"/>
+    <text x="22" y="24" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="14" fill="#efc04d">
+      VALIDADO GAMP5 · ANMAT RES 1780/2025 · 21 CFR PART 11
+    </text>
+  </g>
+
+  <!-- Headline -->
+  <text x="80" y="310" font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700" font-size="64" fill="#ffffff" letter-spacing="-1.5">
+    Trazabilidad seed-to-sale
+  </text>
+  <text x="80" y="380" font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700" font-size="64" fill="#ffffff" letter-spacing="-1.5">
+    para cannabis
+    <tspan fill="#34d399">medicinal.</tspan>
+  </text>
+
+  <!-- Sub -->
+  <text x="80" y="440" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#cbd5e1">
+    Audit log SHA-256 encadenado · CoA digital publico
+  </text>
+
+  <!-- Stats row bottom -->
+  <g transform="translate(80, 515)">
+    <g>
+      <text font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700" font-size="42" fill="#ffffff">10</text>
+      <text y="50" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#86efac">etapas trazadas</text>
+    </g>
+    <g transform="translate(200, 0)">
+      <text font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700" font-size="42" fill="#ffffff">84</text>
+      <text y="50" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#86efac">registros CUMCS</text>
+    </g>
+    <g transform="translate(400, 0)">
+      <text font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700" font-size="42" fill="#ffffff">100%</text>
+      <text y="50" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#86efac">audit coverage</text>
+    </g>
+    <g transform="translate(620, 0)">
+      <text font-family="'Space Grotesk', system-ui, sans-serif" font-weight="700" font-size="42" fill="#efc04d">ALCOA+</text>
+      <text y="50" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#86efac">data integrity</text>
+    </g>
+  </g>
+
+  <!-- URL top right -->
+  <text x="1120" y="105" text-anchor="end" font-family="JetBrains Mono, ui-monospace, monospace" font-size="14" fill="#86efac" opacity="0.8">
+    canntrace.pages.dev
+  </text>
+</svg>

@@ -1,0 +1,427 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* GrowFlow - dark moderno
+     Primary: lima vibrante
+     Accent:  violeta suave */
+  --color-primary-50: #f7fee7;
+  --color-primary-100: #ecfccb;
+  --color-primary-200: #d9f99d;
+  --color-primary-300: #bef264;
+  --color-primary-400: #a3e635;
+  --color-primary-500: #84cc16;
+  --color-primary-600: #65a30d;
+  --color-primary-700: #4d7c0f;
+  --color-primary-800: #3f6212;
+  --color-primary-900: #365314;
+
+  /* Accent violeta - highlights y badges */
+  --color-accent-50: #f5f3ff;
+  --color-accent-100: #ede9fe;
+  --color-accent-200: #ddd6fe;
+  --color-accent-300: #c4b5fd;
+  --color-accent-400: #a78bfa;
+  --color-accent-500: #8b5cf6;
+  --color-accent-600: #7c3aed;
+  --color-accent-700: #6d28d9;
+  --color-accent-800: #5b21b6;
+  --color-accent-900: #4c1d95;
+
+  /* Surface neutro frio */
+  --color-surface-50: #fafafa;
+  --color-surface-100: #f4f4f5;
+  --color-surface-200: #e4e4e7;
+  --color-surface-300: #d4d4d8;
+  --color-surface-400: #a1a1aa;
+  --color-surface-500: #71717a;
+  --color-surface-600: #52525b;
+  --color-surface-700: #3f3f46;
+  --color-surface-800: #27272a;
+  --color-surface-900: #18181b;
+  --color-surface-950: #0a0a0f;
+
+  /* Estados */
+  --color-danger: #f43f5e;
+  --color-warning: #f59e0b;
+  --color-info: #38bdf8;
+  --color-success: #84cc16;
+
+  --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Sora', 'Outfit', sans-serif;
+
+  /* Elevation system */
+  --shadow-card: 0 1px 2px 0 rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.06);
+  --shadow-popover: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+  --shadow-modal: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
+}
+
+/* Codigos de lote con estilo diferenciado */
+.codigo-lote {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Numeros con width igual */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "cv11";
+}
+
+/* Titulos de pagina con mejor display */
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* ResizablePanelGroup maneja el drag nativo */
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  /* La contraparte para Firefox en Mac. Sin ella, el mismo texto claro sobre
+     fondo oscuro sale mas gordo en ese navegador que en todos los demas. */
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-surface-50);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+/* LOS 300 ms QUE EL NAVEGADOR ESPERA POR SI ERA DOBLE TOQUE.
+   Sin esto, cada toque en un boton del mostrador tarda ~300 ms de mas: el
+   navegador se guarda ese rato por si venia un segundo toque para hacer zoom.
+   Se siente exactamente como una app lenta, y no lo es.
+
+   Va SOLO en los controles, no en `body`: en el body apagaria tambien el
+   doble-toque para hacer zoom en el resto de la pagina, y en una tabla de caja
+   agrandar con dos toques es algo que la gente usa. El pinch para hacer zoom no
+   se toca en ningun caso — eso seria `user-scalable=no`, que es otra cosa y no
+   esta. */
+button,
+a[href],
+[role="button"],
+input,
+select,
+textarea,
+label {
+  touch-action: manipulation;
+}
+
+/* ============================================
+   DARK MODE — compat layer
+   Paginas nuevas usan tokens semanticos (bg-card, dark:bg-surface-900).
+   Estas reglas mapean utilities sin prefijo dark: a sus contrapartes oscuras
+   para codigo viejo. Viven en @layer utilities asi ganan por cascade sin !important.
+   ============================================ */
+.dark body,
+.dark {
+  background-color: var(--color-surface-950);
+  color: var(--color-surface-300);
+}
+
+@layer utilities {
+  /* Backgrounds base */
+  .dark .bg-white { background-color: var(--color-surface-900); }
+  .dark .bg-surface-50 { background-color: var(--color-surface-950); }
+  .dark .bg-surface-100 { background-color: var(--color-surface-900); }
+
+  /* Borders */
+  .dark .border-surface-200 { border-color: var(--color-surface-700); }
+  .dark .border-surface-100 { border-color: var(--color-surface-800); }
+
+  /* Texto */
+  .dark .text-surface-900 { color: var(--color-surface-100); }
+  .dark .text-surface-800 { color: var(--color-surface-200); }
+  .dark .text-surface-700 { color: var(--color-surface-300); }
+  .dark .text-surface-600 { color: var(--color-surface-400); }
+
+  /* Form controls */
+  .dark input,
+  .dark textarea,
+  .dark select {
+    background-color: var(--color-surface-800);
+    border-color: var(--color-surface-700);
+    color: var(--color-surface-200);
+  }
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: var(--color-surface-500);
+  }
+
+  /* Hovers heredados */
+  .dark .hover\:bg-surface-50:hover { background-color: var(--color-surface-800); }
+  .dark .hover\:bg-surface-100:hover { background-color: var(--color-surface-800); }
+
+  /* Cards tintados (10% opacity) */
+  .dark .bg-primary-50 { background-color: rgba(22, 163, 74, 0.1); }
+  .dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.1); }
+  .dark .bg-green-50 { background-color: rgba(34, 197, 94, 0.1); }
+  .dark .bg-purple-50 { background-color: rgba(168, 85, 247, 0.1); }
+  .dark .bg-orange-50 { background-color: rgba(249, 115, 22, 0.1); }
+  .dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.1); }
+  .dark .bg-red-50 { background-color: rgba(239, 68, 68, 0.1); }
+
+  /* Login gradient */
+  .dark .bg-gradient-to-br {
+    background: linear-gradient(to bottom right, #020617, #0f172a, #14532d);
+  }
+}
+
+:root {
+  /* Tokens semanticos (nuevos) - usar en codigo nuevo en lugar de bg-white/bg-surface-* */
+  --color-background: #f6faf8;
+  --color-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-muted: #eef4f0;
+  --color-muted-foreground: #64748b;
+  --color-border: #dde7e1;
+  --color-ring: #4d7c0f;
+
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+.dark {
+  --color-background: #020617;
+  --color-foreground: #e2e8f0;
+  --color-card: #0f172a;
+  --color-card-foreground: #e2e8f0;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-border: #334155;
+  --color-ring: #a3e635;
+
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+/* Focus ring global accesible - WCAG 2.2 AA */
+*:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@theme inline {
+  /* Tokens semanticos expuestos a Tailwind - usar bg-card, text-muted-foreground, etc. */
+  --color-background-theme: var(--color-background);
+  --color-foreground-theme: var(--color-foreground);
+  --color-card-theme: var(--color-card);
+  --color-card-foreground-theme: var(--color-card-foreground);
+  --color-muted-theme: var(--color-muted);
+  --color-muted-foreground-theme: var(--color-muted-foreground);
+  --color-border-theme: var(--color-border);
+  --color-ring-theme: var(--color-ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* ─── Dashboard dark overrides (Tremor + Recharts internos) ──────────────── */
+.ct-dash-wrap .tremor-Card-root {
+  background: #101016 !important;
+  border-color: #1f1f2b !important;
+  box-shadow: none !important;
+  color: #d4d4dd !important;
+}
+.ct-dash-wrap .tremor-Title-root,
+.ct-dash-wrap .tremor-Metric-root { color: #ececf1 !important; }
+.ct-dash-wrap .tremor-Text-root { color: #8f8f9f !important; }
+.ct-dash-wrap .tremor-BadgeDelta-root { background: #15151d !important; border: 1px solid #1f1f2b !important; }
+.ct-dash-wrap .tremor-ProgressBar-root { background: #1c1c27 !important; }
+
+/* Recharts internos (Tremor renderiza con Recharts) */
+.ct-dash-wrap .recharts-cartesian-grid line { stroke: #1f1f2b !important; }
+.ct-dash-wrap .recharts-cartesian-axis-line,
+.ct-dash-wrap .recharts-cartesian-axis-tick-line { stroke: #2a2a3a !important; }
+.ct-dash-wrap .recharts-cartesian-axis-tick-value,
+.ct-dash-wrap .recharts-text { fill: #8f8f9f !important; }
+.ct-dash-wrap .recharts-legend-item-text { color: #b3b3c0 !important; }
+.ct-dash-wrap .recharts-default-tooltip {
+  background: #101016 !important;
+  border: 1px solid #404d20 !important;
+  border-radius: 8px !important;
+  color: #ececf1 !important;
+}
+.ct-dash-wrap .recharts-tooltip-label { color: #ececf1 !important; font-family: 'Space Grotesk', system-ui !important; font-weight: 600 !important; }
+.ct-dash-wrap .recharts-tooltip-item { color: #d4d4dd !important; }
+
+/* Donut center text */
+.ct-dash-wrap .tremor-DonutChart-root text,
+.ct-dash-wrap .tremor-DonutChart-root tspan { fill: #d4d4dd !important; font-family: 'JetBrains Mono', monospace !important; }
+
+/* Scrollbar fino para wrapper scrollable */
+.ct-page-scroll { scrollbar-width: thin; scrollbar-color: #1f1f2b transparent; }
+.ct-page-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.ct-page-scroll::-webkit-scrollbar-track { background: transparent; }
+.ct-page-scroll::-webkit-scrollbar-thumb { background: #1f1f2b; border-radius: 3px; }
+.ct-page-scroll::-webkit-scrollbar-thumb:hover { background: #404d20; }
+
+/*
+ * Barras de pestañas: scroll sin barra a la vista.
+ *
+ * Tres archivos ya usaban la clase `scrollbar-none` dando por hecho que Tailwind
+ * la traía. No la trae: no hacía nada y la barra gris del navegador quedaba
+ * ocupando 15 px debajo de las pestañas. Definirla acá arregla de una todas las
+ * que ya la declaran.
+ */
+.scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-none::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+/*
+ * Sin barra visible no queda ninguna señal de que hay más pestañas al costado.
+ * El degradado la reemplaza: se apaga solo cuando no hay nada más para ver, así
+ * que además informa mejor que la barra, que estaba siempre aunque no hiciera falta.
+ *
+ * El degradado va en un WRAPPER que no scrollea, no en el scroller mismo. Un
+ * absolute con right:0 adentro de un overflow-x:auto se ancla al final del
+ * contenido, no al borde visible: con las pestañas de la ONG eso lo dejaba a
+ * 415 px, fuera de cuadro.
+ */
+.ct-tabs-fade { position: relative; }
+.ct-tabs-fade::before,
+.ct-tabs-fade::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 28px;
+  pointer-events: none; opacity: 0; transition: opacity .18s ease; z-index: 2;
+}
+.ct-tabs-fade::before { left: 0; background: linear-gradient(90deg, #0a0a0f, transparent); }
+.ct-tabs-fade::after { right: 0; background: linear-gradient(270deg, #0a0a0f, transparent); }
+.ct-tabs-fade[data-hay-izq='1']::before,
+.ct-tabs-fade[data-hay-der='1']::after { opacity: 1; }
+
+/* ============================================================================
+ * MOVIMIENTO REDUCIDO Y PUNTERO TÁCTIL
+ *
+ * Dos reglas que van con CADA animación y que no estaban en ningún lado: había
+ * un solo `prefers-reduced-motion` en toda la app (en el Manual) contra 158
+ * `animate-spin`/`animate-pulse`, y ningún gate de hover.
+ *
+ * Van acá, globales, y no componente por componente: son la clase de cosa que
+ * se olvida en el próximo botón que alguien agregue.
+ * ==========================================================================*/
+
+/*
+ * MENOS Y MÁS SUAVE, NO CERO.
+ *
+ * Se apaga el MOVIMIENTO —transform, y los giros que no terminan nunca— y se
+ * deja lo que ayuda a entender: opacidad y color. Un `animation: none` a secas
+ * congelaría el spinner en un frame cualquiera y la persona no sabría si el
+ * sistema está trabajando o se colgó; por eso el spinner pasa a latir en
+ * opacidad en vez de girar.
+ *
+ * Importa más que en otra app: esto lo usa gente con epilepsia, migraña y
+ * esclerosis múltiple —está en la lista de diagnósticos del legajo— y para
+ * ellas el movimiento no es una preferencia estética.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Las dos que sí tienen que seguir vivas, porque comunican «esperá»: se
+     quedan, sin girar ni escalar. */
+  .animate-spin, .animate-pulse {
+    animation: ct-latido 1.4s ease-in-out infinite !important;
+    animation-duration: 1.4s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+@keyframes ct-latido { 0%, 100% { opacity: 1 } 50% { opacity: .45 } }
+
+/*
+ * EL HOVER ES DE MOUSE, NO DE DEDO.
+ *
+ * En un teléfono el `:hover` se dispara al tocar y queda PEGADO hasta que
+ * tocás otra cosa: el botón que apretaste se queda iluminado como si el dedo
+ * siguiera encima. Con `active:` alcanza para el feedback táctil, que además
+ * es el que corresponde.
+ *
+ * Se apaga sólo el hover de FONDO Y BORDE, que es el que se nota pegado. El
+ * color de texto se deja: no molesta y en varios lados es lo único que
+ * distingue un control de un cartel.
+ */
+@media (hover: none), (pointer: coarse) {
+  a:hover, button:hover, [role='button']:hover, label:hover {
+    background-color: revert-layer;
+    border-color: revert-layer;
+  }
+}
+
+/*
+ * EL BOTÓN TIENE QUE ACUSAR EL TOQUE.
+ *
+ * En el teléfono un botón no tiene hover, y desde que el hover quedó apagado
+ * para punteros gruesos —regla de arriba— tampoco tiene el resto que le quedaba:
+ * lo tocás y hasta que la pantalla cambia no pasa NADA. En una conexión lenta
+ * eso son varios segundos de duda, y la reacción natural es volver a tocar, que
+ * en un formulario es cargar dos veces lo mismo.
+ *
+ * `:active` es lo que corresponde ahí: dura lo que dura el dedo apoyado, no
+ * queda pegado como el hover, y no necesita JavaScript.
+ *
+ * 0.97 y no 0.9: tiene que sentirse como que el botón cede, no como que salta.
+ * A 100ms, que es el rango de una respuesta a un toque —por encima de eso la
+ * animación llega después de la acción y estorba en vez de confirmar.
+ *
+ * `:has()` excluye los controles que ya traen su propio `active:` en la clase,
+ * para no aplicar la escala dos veces.
+ */
+@media (hover: none), (pointer: coarse) {
+  button:not(:disabled):active,
+  a[href]:active,
+  [role='button']:not([aria-disabled='true']):active,
+  label:has(> input[type='checkbox']):active,
+  label:has(> input[type='radio']):active {
+    transform: scale(0.97);
+    transition: transform 100ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+/*
+ * Y en escritorio también, pero más sutil.
+ *
+ * Ahí el hover ya confirma que el control está vivo, así que el `:active` sólo
+ * cierra el gesto de apretar. Sin esto un click se siente como si no hubiera
+ * pasado nada hasta que la pantalla responde.
+ */
+@media (hover: hover) and (pointer: fine) {
+  button:not(:disabled):active,
+  [role='button']:not([aria-disabled='true']):active {
+    transform: scale(0.985);
+    transition: transform 100ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+/* Movimiento reducido: el botón sigue acusando el toque, pero sin escalar. */
+@media (prefers-reduced-motion: reduce) {
+  button:active, a[href]:active, [role='button']:active { transform: none !important }
+}

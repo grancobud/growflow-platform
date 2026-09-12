@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#a3e635" />
+
+    <title>GrowFlow · la asociación</title>
+    <meta name="description" content="GrowFlow la asociación: trazabilidad de cultivo y gestion de la asociacion civil." />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- PWA / iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="GrowFlow la asociación" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" />
+
+    <!-- Dark mode antes del paint (evita flash blanco en primera carga) -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('canntrace-dark-mode');
+          var dark = saved === null ? true : saved === 'true';
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) { /* fallback: default dark */
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

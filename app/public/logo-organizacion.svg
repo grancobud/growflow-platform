@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Logo de la organización">
+  <rect width="120" height="120" rx="24" fill="#1f7a4d"/>
+  <path d="M60 26c-9 14-22 22-22 38a22 22 0 0 0 44 0c0-16-13-24-22-38z" fill="#fff" opacity=".92"/>
+  <circle cx="60" cy="66" r="7" fill="#1f7a4d"/>
+</svg>

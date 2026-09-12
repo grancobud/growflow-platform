@@ -1,0 +1,40 @@
+-- Los 158 asientos sueltos eran el desglose del pago, no entregas borradas.
+--
+-- El importador del 20/08/2026 cargó cada entrega con pago partido DOS veces:
+-- una fila por medio de pago —efectivo tanto, transferencia tanto, tal como las
+-- dos columnas «Reembolso Efectivo» y «Reembolso Transferencia» de la planilla—
+-- y ADEMÁS un agregado «Mixto» por el total, atado a la entrega. La caja contaba
+-- las dos cosas: $X.XXX.XXX duplicados.
+--
+-- El par es lo fiel a la planilla; el «Mixto» es el artefacto. Cotejado contra
+-- «Sistema de Gestión - Cooperativa» (hoja D-FORM): de los 18 grupos que la
+-- planilla alcanza a cubrir —termina el 20/11/2025—, 16 coinciden al peso y
+-- ninguno difiere. Los 2 restantes son anteriores al arranque del registro.
+--
+-- Se corrigen sólo los casos donde la evidencia es exacta y uniforme:
+--
+--   partido   55 grupos / 110 filas / $X.XXX.XXX — la entrega tiene aporte igual
+--             a la suma de los sueltos, medio_pago «Mixto», y UN solo asiento
+--             atado por ese total. Se escribe `aporte_desglose`, se atan los
+--             sueltos y se borra el agregado.
+--   duplicado 12 grupos /  25 filas /   $XXX.XXX — cada entrega del día ya tiene
+--             su asiento correcto y los sueltos lo repiten fila por fila.
+--             Se borran los sueltos.
+--
+-- Quedan SIN TOCAR 23 filas por $X.XXX.XXX: los códigos que no son pacientes
+-- (`CI`, `SAI`, `Merma`) y los grupos donde la suma no cierra. Esperan que
+-- Gastón diga qué son.
+--
+-- Respaldo previo: ong_caja_respaldo_20260830, ong_dispensas_respaldo_20260830.
+-- El plan aplicado quedó en ong_correccion_20260830, fila por fila.
+--
+-- Efecto: ingresos $XX.XXX.XXX -> $XX.XXX.XXX. Egresos SIN CAMBIO. El saldo pasa
+-- de +$X.XXX.XXX a -$X.XXX.XXX: la caja daba positivo sólo porque contaba dos
+-- veces esos $7,5M. «Sin discriminar» baja de $X.XXX.XXX a $X.XXX.XXX.
+--
+-- Ya aplicada a mano sobre qivhrbsnvuaylqofpjti el 30/08/2026. Queda acá como
+-- registro y para poder repetirla; es idempotente (no hay sueltos que cumplan
+-- las condiciones una vez corregidos). NO aplicada a Chaco.
+
+-- (sin sentencias: la corrección fue puntual sobre datos, no sobre el esquema.
+--  El detalle exacto de las 135 filas vive en ong_correccion_20260830.)
