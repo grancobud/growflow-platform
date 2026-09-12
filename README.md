@@ -1,5 +1,7 @@
 # GrowFlow
 
+[![CI](https://github.com/grancobud/growflow-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/grancobud/growflow-platform/actions/workflows/ci.yml)
+
 **Del esqueje al recibo firmado.** Trazabilidad de cultivo de cannabis medicinal y gestión de la asociación civil que lo ampara, en un solo sistema: las plantas, lo que cuesta producirlas, a quién se le entrega y los papeles que eso exige.
 
 Este repositorio es la **versión pública** del sistema. Contiene el código completo y el esquema de base de datos, **sin datos de ninguna organización real**: los códigos de paciente, DNI y números de registro que aparecían en comentarios de las migraciones fueron reemplazados por marcadores, y las migraciones que sólo corregían datos de una instalación concreta no están incluidas.
@@ -59,6 +61,10 @@ ellos, no porque quede lindo.
 npm test          # 623 tests
 npm run test:e2e  # Playwright
 ```
+
+GitHub Actions los corre en cada push y en cada pull request, junto con el
+typecheck y el lint. La configuración está en `.github/workflows/ci.yml`, y el
+estándar lo sostiene el sistema en vez de la memoria de quien sube el código.
 
 Los nombres de personas, los datos de contacto y los importes que aparecen en los
 tests son inventados. Ver "Sobre los datos" más abajo.
